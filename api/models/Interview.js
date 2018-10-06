@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 
-const interviewSchema = new mongoose.Schema({
+const interviewSchema = new Schema({
   subjectId: ObjectId,
   answers: Map,
   audio: String,
@@ -8,6 +10,6 @@ const interviewSchema = new mongoose.Schema({
   tags: [ObjectId]
 });
 
-const Interview = mongoose.model('Interview', schema);
+const Interview = mongoose.model('Interview', interviewSchema);
 
 module.exports = Interview;

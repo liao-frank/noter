@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const ObjectId = Schema.ObjectId;
 
-const planSchema = new mongoose.Schema({
+const planSchema = new Schema({
   traits: Map,
   questions: Map,
   interviews: [ObjectId]
