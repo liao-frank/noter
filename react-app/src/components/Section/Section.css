@@ -1,0 +1,12 @@
+.section {
+  flex: 1;
+  padding: var(--vertical-padding) var(--horizontal-padding);
+  box-sizing: border-box;
+
+  font-family: var(--primary-font-family);
+}
+
+.section .title,
+.section .subtitle {
+  font-family: var(--secondary-font-family);
+}

@@ -1,0 +1,22 @@
+.details {
+
+}
+
+.details .header {
+  padding: 0 var(--horizontal-padding);
+}
+
+.details .info {
+  color: var(--primary-color);
+  font-size: 12px;
+}
+
+.details .info .detail {
+  align-items: center;
+  line-height: 2;
+}
+
+.details .info .detail .key {
+  flex-basis: 100px;
+  color: var(--secondary-color);
+}

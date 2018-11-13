@@ -1,0 +1,11 @@
+.app {
+  min-width: 100vw;
+  min-height: 100vh;
+
+  font-family: var(--primary-font-family);
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  color: var(--primary-color);
+
+  background: var(--secondary-background);
+}

@@ -1,0 +1,13 @@
+.button {
+  padding: 14px var(--horizontal-padding);
+  border-radius: var(--small-radius);
+  font-size: 14px;
+
+  transition: all var(--fast-transition);
+  user-select: none;
+  cursor: pointer;
+}
+
+.button.transparent:hover {
+  background-color: #f5f5f7;
+}

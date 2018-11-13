@@ -1,5 +1,136 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,700|Open+Sans:300,400');
+
+:root {
+  /*
+
+  */
+  --primary-accent-color: #4f78ff;
+  --secondary-accent-color: #917bfb;
+
+  --small-border: solid 1px #e1e2e6;
+  --large-border: solid 2px #e1e2e6;
+
+  --small-border-radius: 4px;
+  --large-border-radius: 6px;
+
+  --primary-background: #ffffff;
+  --secondary-background: #f5f5f7;
+  --primary-dark-background: #434A54;
+  --secondary-dark-background: #656D78;
+
+  --primary-color: #6a6c74;
+  --secondary-color: #a9abab;
+  --tertiary-color: #4169f2;
+  --primary-dark-color: #ffffff;
+  --secondary-dark-color: #F5F7FA;
+
+
+  --primary-font-family: 'Open Sans', sans-serif;
+  --secondary-font-family: Montserrat, sans-serif;
+
+  --fast-transition: 0.15s ease;
+  --slow-transition: 0.7 ease;
+
+  --vertical-padding: 12px;
+  --horizontal-padding: 16px;
+
+  --small-box-shadow: 0 3px 6px rgba(127, 130, 140, 0.08), 0 3px 6px rgba(127, 130, 140, 0.12);
+  --large-box-shadow: 0 10px 20px rgba(127, 130, 140, 0.09), 0 6px 6px rgba(127, 130, 140, 0.12);
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: var(--primary-font-family);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.header {
+  font-family: var(--secondary-font-family);
+  color: #131317;
+  line-height: 1.5;
+}
+
+.title {
+  font-family: var(--secondary-font-family);
+  font-weight: 400;
+  color: var(--primary-color);
+}
+.subtitle {
+  font-family: var(--secondary-font-family);
+  font-weight: 400;
+  color: var(--secondary-color);
+}
+
+.separator {
+  height: 1px;
+  margin: 0 var(--horizontal-padding);
+  background-color: #e1e2e6;
+}
+
+.flex-row {
+  display: flex;
+  flex: 1;
+}
+.flex-col {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.icon,
+.logo {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  cursor: pointer;
+}
+.icon-16 {
+  width: 16px;
+  height: 16px;
+}
+.icon-24 {
+  width: 24px;
+  height: 24px;
+}
+.icon-32 {
+  width: 32px;
+  height: 32px;
+}
+
+.icon-gear {
+  background-image: url('icons/gear-gray.svg');
+}
+.icon-glass {
+  background-image: url('icons/glass-gray.svg');
+  background-size: 120%;
+}
+.icon-right-arrow {
+  background-image: url('icons/right-arrow-black.svg');
+}
+.icon-folder {
+  background-image: url('icons/folder-gray.svg');
+}
+
+.logo-noter:before {
+  content: 'noter';
+  font-family: Montserrat, sans-serif;
+  color: #131317;
+  font-weight: 700;
+}
+
+.unselectable {
+  user-select: none;
+  cursor: default;
+}
+
+.clickable {
+  cursor: pointer;
 }

@@ -1,0 +1,31 @@
+.profile {
+  position: relative;
+  border-radius: 50%;
+  box-shadow: var(--small-box-shadow);
+  background-size: cover;
+  background-position: center;
+}
+
+.profile .tooltip {
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 80%);
+  padding: 4px 6px;
+  border-radius: var(--small-border-radius);
+
+  font-size: 12px;
+  color: var(--primary-dark-color);
+
+  background-color: var(--primary-dark-background);
+  visibility: hidden;
+  opacity: 0;
+  transition: var(--fast-transition);
+  user-select: none;
+}
+
+.profile:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}

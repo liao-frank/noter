@@ -1,0 +1,20 @@
+.breadcrumbs {
+  margin: var(--vertical-padding) var(--horizontal-padding);
+  align-items: center;
+}
+
+.breadcrumbs .header {
+  margin: 0;
+  font-weight: 400;
+  color: #2e2e37;
+}
+
+.breadcrumbs .header:last-of-type {
+  font-weight: 500;
+  color: #141318;
+}
+
+.breadcrumbs .icon-right-arrow {
+  position: relative;
+  margin: 0 6px;
+}

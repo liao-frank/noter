@@ -1,0 +1,8 @@
+.profile-group .container {
+  display: inline-block;
+}
+
+.profile-group .container .profile {
+  border: solid 4px #fff;
+  box-shadow: none;
+}

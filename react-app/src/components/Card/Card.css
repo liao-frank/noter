@@ -1,0 +1,10 @@
+.card {
+  position: relative;
+  width: fit-content;
+  padding: var(--vertical-padding) var(--horizontal-padding);
+  box-sizing: border-box;
+
+  background: var(--primary-background);
+  border-radius: var(--small-border-radius);
+  box-shadow: var(--small-box-shadow);
+}
