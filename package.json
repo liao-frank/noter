@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "run:api": "cd api; npm run start",
     "dev:api": "cd api; npm run dev",
-    "run:api": "cd api; npm run start"
+    "dev:react": "cd react-app; npm run start",
+    "dev": "concurrently \"npm:dev:api\" \"npm:dev:react\" --kill-others"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^4.0.1",
     "dotenv": "^6.0.0"
   }
 }
