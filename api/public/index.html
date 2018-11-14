@@ -1,0 +1,21 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const send = (model, action, data) => {
+    const socket = io.connect(window.location + model.toLowerCase());
+
+    socket.on('connect', () => {
+      socket.on(action, (result) => {
+        console.log(result);
+        socket.disconnect();
+      });
+      socket.emit(action, data);
+
+      setTimeout(() => {
+        if (socket.connected) {
+          console.log('request timed out');
+          socket.disconnect();
+        }
+      }, 3000);
+    });
+  };
+</script>

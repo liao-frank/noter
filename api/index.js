@@ -4,10 +4,14 @@ const PORT = '3001';
 require('dotenv').config();
 const fs = require('fs');
 const mongoose = require('mongoose');
-const { configureModel } = require(__dirname + '/utils/mongooseSocket');
-const app = require('express')();
+const { ModelSocket, attachSocketClass } = require(__dirname + '/utils/mongooseSocket');
+const express = require('express')
+const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+
+app.use(express.static(__dirname + '/public'));
+
 /* HELPERS */
 const getModels = () => {
   const path = __dirname + '/models';
@@ -16,15 +20,48 @@ const getModels = () => {
   return models.filter(m => Object.keys(m).length);
 };
 
+const getSocketClasses = () => {
+  const path = __dirname + '/sockets';
+  const files = fs.readdirSync(path);
+  const socketClasses = files.map(file => require(`${path}/${file}`));
+  return socketClasses;
+};
+
+const attachSocketClasses = () => {
+  const models = getModels();
+  const modelMap = models.reduce((accum, model) => {
+    const { modelName } = model;
+    accum[modelName.toLowerCase()] = model;
+    return accum;
+  }, {});
+  const socketClasses = getSocketClasses();
+
+  for (const SocketClass of socketClasses) {
+    const socketClassName = SocketClass.name
+      .replace(/Socket$/, '')
+      .toLowerCase();
+
+    const model = modelMap[socketClassName];
+    if (model) {
+      attachSocketClass(io, model, new SocketClass(model));
+      modelMap[socketClassName] = undefined;
+    }
+  }
+
+  for (const model of Object.values(modelMap)) {
+    if (model) {
+      attachSocketClass(io, model, new ModelSocket(model));
+    }
+  }
+};
+
 /* CONNECT */
 mongoose.connect(process.env.MLAB_URL);
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
-  for (let model of getModels()) {
-    configureModel(io, model);
-  }
+  attachSocketClasses();
 
   http.listen(PORT, function(){
     console.log(`API listening to port ${PORT}`);

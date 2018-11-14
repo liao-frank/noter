@@ -7,7 +7,7 @@ const noteSchema = new Schema({
   members: [ObjectId],
   categories: [String],
   created: Date, createdBy: ObjectId,
-  modified: Date, modifiedBy: ObjectId
+  modified: Date, modifiedBy: ObjectId,
   content: String,
   // TODO tags
 });
