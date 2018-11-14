@@ -1,5 +1,5 @@
 const md5 = require('md5');
-const { ModelSocket } = require(__dirname + '/../utils/mongooseSocket');
+const { ModelSocket } = require(__dirname + '/../utils/ModelSocket');
 const Folder = require(__dirname + '/../models/Folder.js');
 
 class UserSocket extends ModelSocket {

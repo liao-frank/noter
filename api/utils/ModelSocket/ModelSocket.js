@@ -26,8 +26,8 @@ class ModelSocket {
 
     return new Promise((resolve, reject) => {
       this.model.findOne(query)
-        .then((docs) => {
-          resolve({ docs });
+        .then((doc) => {
+          resolve({ doc });
         })
         .catch((error) => {
           reject(error);

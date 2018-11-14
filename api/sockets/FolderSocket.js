@@ -1,4 +1,4 @@
-const { ModelSocket } = require(__dirname + '/../utils/mongooseSocket');
+const { ModelSocket } = require(__dirname + '/../utils/ModelSocket');
 
 class FolderSocket extends ModelSocket {
   constructor(model) {

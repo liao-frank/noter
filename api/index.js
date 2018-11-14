@@ -4,7 +4,7 @@ const PORT = '3001';
 require('dotenv').config();
 const fs = require('fs');
 const mongoose = require('mongoose');
-const { ModelSocket, attachSocketClass } = require(__dirname + '/utils/mongooseSocket');
+const { ModelSocket, attachSocketClass } = require(__dirname + '/utils/ModelSocket');
 const express = require('express')
 const app = express();
 const http = require('http').Server(app);
