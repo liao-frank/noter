@@ -1,18 +1,14 @@
 import React from 'react';
-import MyNotesView from 'views/MyNotesView';
+import Directory from 'components/Directory';
 
 const HOME = 'HOME';
-const MY_NOTES = 'MY_NOTES';
-const SHARED_NOTES = 'SHARED_NOTES';
-const TRASH = 'TRASH';
+const DIRECTORY = 'DIRECTORY';
 
 export const PAGES = {
   HOME,
-  MY_NOTES,
-  SHARED_NOTES,
-  TRASH
+  DIRECTORY
 };
 
 export const VIEWS = {
-  [MY_NOTES]: <MyNotesView/>
+  [DIRECTORY]: <Directory/>
 };

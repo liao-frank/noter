@@ -1,0 +1,32 @@
+.create-button {
+  position: relative;
+  margin: calc(3 * var(--vertical-padding)) var(--horizontal-padding);
+}
+
+.create-button .button {
+
+}
+
+.create-button .create-menu {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+
+  border-radius: var(--small-border-radius);
+  box-shadow: var(--large-box-shadow);
+  background-color: #ffffff;
+
+  transform: translateY(-10%);
+  transition: all var(--fast-transition);
+}
+
+.create-button .create-menu.open {
+  visibility: visible;
+  opacity: 1;
+
+  transform: translateY(0);
+}

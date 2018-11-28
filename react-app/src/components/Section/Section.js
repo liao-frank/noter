@@ -1,4 +1,5 @@
 import React from 'react';
+import { kebabCase } from 'lodash';
 
 import './Section.css';
 
@@ -10,7 +11,7 @@ const Section = (props) => {
   } = props;
 
   const classNames = ['section'];
-  title && classNames.push(title.toLowerCase());
+  title && classNames.push(kebabCase(title));
   className && classNames.push(className);
 
   return (

@@ -22,7 +22,7 @@ window.emit = (modelAction, data) => {
   return new Promise((resolve, reject) => {
     socket.on('connect', () => {
       socket.on(action, (result) => {
-        if (result.error) {
+        if (!result || result.error) {
           reject(result);
         }
         else {

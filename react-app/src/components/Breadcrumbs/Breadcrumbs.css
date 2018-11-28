@@ -1,12 +1,24 @@
 .breadcrumbs {
-  margin: var(--vertical-padding) var(--horizontal-padding);
+  margin: 0 calc(var(--horizontal-padding) - 6px);
   align-items: center;
+
+  user-select: none;
 }
 
 .breadcrumbs .header {
   margin: 0;
+  padding: 4px 6px;
+
   font-weight: 400;
   color: #2e2e37;
+  background-color: inherit;
+  border-radius: var(--small-border-radius);
+
+  transition: var(--fast-transition);
+}
+
+.breadcrumbs .header.selectable:hover {
+  background-color: var(--darken-background);
 }
 
 .breadcrumbs .header:last-of-type {
@@ -16,5 +28,4 @@
 
 .breadcrumbs .icon-right-arrow {
   position: relative;
-  margin: 0 6px;
 }

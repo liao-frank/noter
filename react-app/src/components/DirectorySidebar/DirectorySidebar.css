@@ -1,0 +1,13 @@
+.directory-sidebar {
+  /* overflow: auto; */
+}
+
+.directory-sidebar .directory-links .button.active {
+  color: var(--purple);
+  background-color: var(--purple-background);
+  cursor: default;
+}
+
+.directory-sidebar .directory-links .button.active:hover {
+
+}

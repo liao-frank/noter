@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import './Search.css';
+import SearchIcon from 'icons/glass-gray.svg';
 
 class Search extends PureComponent {
   constructor(props) {
@@ -35,7 +36,9 @@ class Search extends PureComponent {
         // onMouseLeave={this.blur}
       >
         <div className={barClassNames.join(' ')}>
-          <div className="icon icon-24 icon-glass unselectable"></div>
+          <div className="icon icon-24 unselectable"
+            style={{ backgroundImage: `url(${SearchIcon})` }}
+          ></div>
           <input
             ref={(node) => { this.inputNode = node }}
             spellCheck="false"

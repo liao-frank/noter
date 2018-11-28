@@ -8,9 +8,14 @@ const Sidebar = (props) => {
   props.right && classNames.push('right');
   props.background && classNames.push('background');
   props.className && classNames.push(props.className);
+  props.hidden && classNames.push('hidden');
 
   const style = {
     flexBasis: parseInt(props.width, 10) + 'px'
+  };
+  props.style && Object.assign(style, props.style);
+  const contentStyle = {
+    width: parseInt(props.width, 10) + 'px'
   };
 
   return (
@@ -18,7 +23,9 @@ const Sidebar = (props) => {
       className={classNames.join(' ')}
       style={style}
     >
-      { props.children }
+      <div className="content" style={contentStyle}>
+        { props.children }
+      </div>
     </div>
   );
 };

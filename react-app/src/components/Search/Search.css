@@ -1,6 +1,6 @@
 .search {
   flex-basis: 500px;
-  padding: var(--vertical-padding) var(--horizontal-padding);
+  /* padding: var(--vertical-padding) var(--horizontal-padding); */
   box-sizing: border-box;
 
   transition: all var(--fast-transition);
@@ -9,7 +9,7 @@
   user-select: none;
 }
 .search.focus {
-  padding: var(--vertical-padding) var(--horizontal-padding);
+  /* padding: var(--vertical-padding) var(--horizontal-padding); */
 
   user-select: auto;
 }
@@ -22,6 +22,10 @@
   align-items: center;
 
   transition: all var(--fast-transition);
+}
+
+.search .bar .icon {
+  background-size: 120%;
 }
 
 .search .bar input {

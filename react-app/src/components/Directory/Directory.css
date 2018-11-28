@@ -1,0 +1,68 @@
+.directory {
+
+}
+
+.directory .section.folders .flex-row,
+.directory .section.notes .flex-row {
+  flex-wrap: wrap;
+}
+
+.directory .section.folders .card {
+  display: inline-block;
+  flex: 0 1 20%;
+  max-width: 225px;
+  min-width: 175px;
+  margin: var(--vertical-padding) var(--horizontal-padding) var(--vertical-padding) 0;
+
+  user-select: none;
+}
+.directory .section.folders .card.selected {
+  color: var(--purple);
+  background-color: var(--purple-background);
+  box-shadow: none;
+}
+.directory .section.folders .card .flex-row {
+  align-items: center;
+}
+.directory .section.folders .card .icon {
+  flex-basis: 24px;
+}
+.directory .section.folders .card .name {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  margin-left: var(--horizontal-padding);
+
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.directory .empty-directory {
+  overflow: hidden;
+  position: relative;
+  flex: 1;
+}
+
+.directory .empty-directory .message {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 600px;
+  height: 400px;
+  background-image: url('/images/empty-directory.svg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  transform: translate(-50%, -50%);
+}
+
+.directory .empty-directory .message .text {
+  position: absolute;
+  top: 25%;
+  left: 0px;
+  width: 100%;
+}

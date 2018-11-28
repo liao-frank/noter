@@ -2,21 +2,30 @@
 
 :root {
   /*
-
+  --light-gold: #FEDA8B;
+  --med-gold: #FDC77E;
+  --dark-gold: #FAB57A;
+  --light-peach: #FEE2B9;
+  --med-peach: #FBDECF;
+  --dark-peach: #EF8888;
   */
-  --primary-accent-color: #4f78ff;
-  --secondary-accent-color: #917bfb;
+  --blue: #607ce7;
+  --purple: #787fe8;
+  --purple-background: rgba(120, 127, 232, 0.15);
+  --pink: #d8a2f4;
+  --primary-gradient: linear-gradient(to top right, #607ce0, #9187e4, #d8a2f4);
 
   --small-border: solid 1px #e1e2e6;
   --large-border: solid 2px #e1e2e6;
 
-  --small-border-radius: 4px;
-  --large-border-radius: 6px;
+  --small-border-radius: 3px;
+  --large-border-radius: 4px;
 
   --primary-background: #ffffff;
   --secondary-background: #f5f5f7;
   --primary-dark-background: #434A54;
   --secondary-dark-background: #656D78;
+  --darken-background: rgba(20, 19, 24, 0.05);
 
   --primary-color: #6a6c74;
   --secondary-color: #a9abab;
@@ -29,13 +38,15 @@
   --secondary-font-family: Montserrat, sans-serif;
 
   --fast-transition: 0.15s ease;
-  --slow-transition: 0.7 ease;
+  --med-transition: 0.4s ease;
+  --slow-transition: 0.7s ease;
 
   --vertical-padding: 12px;
   --horizontal-padding: 16px;
 
   --small-box-shadow: 0 3px 6px rgba(127, 130, 140, 0.08), 0 3px 6px rgba(127, 130, 140, 0.12);
-  --large-box-shadow: 0 10px 20px rgba(127, 130, 140, 0.09), 0 6px 6px rgba(127, 130, 140, 0.12);
+  --med-box-shadow: 0 10px 20px rgba(127, 130, 140, 0.09), 0 6px 6px rgba(127, 130, 140, 0.12);
+  --large-box-shadow: 0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
 }
 
 body {
@@ -86,6 +97,8 @@ p {
 
 .icon,
 .logo {
+  display: inline-block;
+
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
@@ -105,18 +118,14 @@ p {
   height: 32px;
 }
 
-.icon-gear {
-  background-image: url('icons/gear-gray.svg');
-}
-.icon-glass {
-  background-image: url('icons/glass-gray.svg');
-  background-size: 120%;
-}
 .icon-right-arrow {
   background-image: url('icons/right-arrow-black.svg');
 }
 .icon-folder {
   background-image: url('icons/folder-gray.svg');
+}
+.icon-folder-purple {
+  background-image: url('icons/folder-purple.svg');
 }
 
 .logo-noter:before {
@@ -126,6 +135,9 @@ p {
   font-weight: 700;
 }
 
+.selectable {
+  cursor: pointer;
+}
 .unselectable {
   user-select: none;
   cursor: default;
