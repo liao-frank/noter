@@ -5,6 +5,7 @@ const ObjectId = Schema.ObjectId;
 const userSchema = new Schema({
   myNotes: { type: ObjectId },
   sharedNotes: { type: ObjectId },
+  trash: { type: ObjectId },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true },

@@ -1,4 +1,5 @@
 const { ModelSocket } = require(__dirname + '/../utils/ModelSocket');
+const User = require(__dirname + '/../models/User.js');
 
 class FolderSocket extends ModelSocket {
   constructor(model) {
@@ -7,7 +8,6 @@ class FolderSocket extends ModelSocket {
 
   create(data) {
     let docs = this._getDocs(data);
-    console.log(docs);
     docs = docs.map((doc) => {
       const { owner } = doc;
 
@@ -20,7 +20,7 @@ class FolderSocket extends ModelSocket {
 
     return super.create({ docs })
       .then((result) => {
-        let promise;
+        const promise = Promise.resolve();
         const folders = this._getDocs(result);
 
         if (docs.length === folders.length) {
@@ -33,18 +33,66 @@ class FolderSocket extends ModelSocket {
                 doc: { $push: { folders: childId } }
               };
 
-              if (promise) {
-                promise.then(() => { this.updateOne(data) });
-              }
-              else {
-                promise = this.updateOne(data);
-              }
+              promise.then(() => { this.updateOne(data) }); // don't return intermediate promises
             }
           }
         }
 
         return promise.then(() => { return result });
       });
+  }
+
+  breadcrumbs(data) {
+    const { user, folder } = data;
+    let currFolderDoc;
+
+    const stack = [];
+    let topLevelFolders = [];
+
+    if (!user || !folder) {
+      return Promise.reject(new Error('Please specify both user and folder ids.'));
+    }
+
+    let traverse;
+    const promise = User.findOne({ _id: data.user })
+      .then((result) => {
+        topLevelFolders = [ result.myNotes, result.sharedNotes, result.trash ];
+        const query = { _id: folder };
+        return this.findOne(query);
+      })
+      .then((result) => {
+        const { doc } = result;
+        currFolderDoc = doc;
+        stack.push({ breadcrumbs: [doc], folder: doc });
+        return traverse();
+      })
+      .then((breadcrumbs) => {
+        return { breadcrumbs };
+      });
+
+    traverse = () => {
+      if (!stack.length) {
+        return [ currFolderDoc ];
+      }
+      const toProcess = stack.pop();
+      const { breadcrumbs, folder } = toProcess;
+
+      if (topLevelFolders.find(id => id.equals(folder._id))) {
+        return breadcrumbs.reverse();
+      }
+      else {
+        const query = { folders: folder._id };
+        return this.find({ query })
+          .then((result) => {
+            for (const doc of result.docs) {
+              stack.push({ breadcrumbs: [...breadcrumbs, doc], folder: doc });
+            }
+            return traverse();
+          });
+      }
+    };
+
+    return promise;
   }
 
   // addNote(data) {

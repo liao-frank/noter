@@ -4,9 +4,11 @@ class ModelSocket {
   }
 
   find(data) {
-    let { id, query } = data;
+    let { id, _id, query } = data;
     query = query || {};
-    query[id] = id;
+    if (id || _id) {
+      query._id = id || _id;
+    }
 
     return new Promise((resolve, reject) => {
       this.model.find(query)
@@ -20,9 +22,11 @@ class ModelSocket {
   }
 
   findOne(data) {
-    let { id, query } = data;
+    let { id, _id, query } = data;
     query = query || {};
-    query[id] = id;
+    if (id || _id) {
+      query._id = id || _id;
+    }
 
     return new Promise((resolve, reject) => {
       this.model.findOne(query)

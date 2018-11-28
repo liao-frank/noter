@@ -56,7 +56,14 @@ const attachSocketClasses = () => {
 };
 
 /* CONNECT */
-mongoose.connect(process.env.MLAB_URL);
+const options = {
+  keepAlive: 1,
+  connectTimeoutMS: 30000,
+  reconnectTries: 30,
+  reconnectInterval: 5000
+};
+
+mongoose.connect(process.env.MLAB_URL, options);
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
