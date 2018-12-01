@@ -63,7 +63,7 @@ class ModelSocket {
     options = options || {};
     options.multi = true;
     data.options = options;
-    return this.updateOne(data);
+    return this.update(data);
   }
 
   updateOne(data) {
@@ -75,7 +75,7 @@ class ModelSocket {
         resolve({ err: 'Missing ' + missing.join(' and ') });
       }
       else {
-        this.model.update(query, doc, options)
+        this.model.findOneAndUpdate(query, doc, options)
           .then((raw) => {
             resolve({ raw });
           })

@@ -1,5 +1,6 @@
 const { ModelSocket } = require(__dirname + '/../utils/ModelSocket');
 const User = require(__dirname + '/../models/User.js');
+const Folder = require(__dirname + '/../models/Folder.js');
 
 class FolderSocket extends ModelSocket {
   constructor(model) {
@@ -95,10 +96,50 @@ class FolderSocket extends ModelSocket {
     return promise;
   }
 
-  // addNote(data) {
-  //   const { parent, doc } = data;
-  //
-  // }
+  deleteOne(data) {
+    const { query } = data;
+
+    const pullParentPromise = Folder.findOneAndUpdate(
+      { folders: query._id },
+      { $pull: { folders: query._id } }
+    );
+
+    const getOwnerPromise = this
+      .findOne({ _id: query._id })
+      .then((result) => {
+        const { doc } = result;
+        return User.findOne({ _id: doc.owner });
+      });
+
+    return Promise
+      .all([pullParentPromise, getOwnerPromise])
+      .then((result) => {
+        const [ parent, owner ] = result;
+        console.log(typeof parent, typeof owner);
+        if (parent && owner) {
+          console.log('parent && owner');
+          if (parent._id.equals(owner.trash)) {
+            console.log(query);
+            return super.deleteOne(query);
+          }
+          else {
+            console.log('Adding to trash');
+            return Folder
+              .findOneAndUpdate(
+                { _id: owner.trash },
+                { $push: { folders: query._id } }
+              )
+              .then((result) => {
+                console.log(result);
+                return result;
+              })
+              .catch((yes) => {
+                console.log(yes);
+              });
+          }
+        }
+      });
+  }
 }
 
 module.exports = FolderSocket;

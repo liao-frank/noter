@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const noteSchema = new Schema({
+  name: { type: String, required: true },
   owner: ObjectId,
   members: [ObjectId],
   categories: [String],
