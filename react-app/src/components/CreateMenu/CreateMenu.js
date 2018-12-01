@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
 import TextInput from 'components/TextInput';
+import Dropdown from 'components/Dropdown';
 import { AppConsumer } from 'components/App';
 
 import './CreateMenu.css';
@@ -26,8 +27,8 @@ class CreateMenu extends PureComponent {
 
   render() {
     const { open } = this.state;
-    const menuClassNames = ['create-menu'];
-    open && menuClassNames.push('open');
+    // const menuClassNames = ['create-menu'];
+    // open && menuClassNames.push('open');
 
     return (
       <div className="create-button">
@@ -42,9 +43,9 @@ class CreateMenu extends PureComponent {
         <AppConsumer>
           { (context) => {
             return (
-              <div
-                className={menuClassNames.join(' ')}
-                ref={(node) => { this.menuNode = node }}
+              <Dropdown
+                open={open} top="0" left="0"
+                getRef={(node) => { this.menuNode = node }}
               >
                 <Button
                   type="transparent"
@@ -56,7 +57,7 @@ class CreateMenu extends PureComponent {
                   icon="note-gray"
                   onClick={() => { this.confirmNew(NOTE, context) }}
                 >Note</Button>
-              </div>
+              </Dropdown>
             );
           } }
         </AppConsumer>
@@ -100,9 +101,7 @@ class CreateMenu extends PureComponent {
 
   confirmNew(type, context) {
     const { user, folder, updateFolder, updateModal } = context;
-    if (type === NOTE) {
-      return;
-    }
+
     const title = 'New ' + type.toLowerCase();
     const inputId = 'create-name';
     const ModalComponent = <Modal
@@ -110,6 +109,7 @@ class CreateMenu extends PureComponent {
       onCancel={() => {}}
       onConfirm={(modalNode) => {
         const name = modalNode.querySelector('#' + inputId).value;
+
         if (name) {
           const query = { doc: {
             parent: folder._id,
@@ -117,7 +117,7 @@ class CreateMenu extends PureComponent {
             name
           } };
 
-          window.emit('folder#create', query)
+          window.emit(type + '#create', query)
             .then((result) => {
               updateFolder();
             })
@@ -128,7 +128,7 @@ class CreateMenu extends PureComponent {
       }}
     >
       <TextInput
-        id={inputId}
+        id={inputId} autofocus
         defaultValue={'Untitled ' + type.toLowerCase()}
         placeholder="Choose a name.."
       />

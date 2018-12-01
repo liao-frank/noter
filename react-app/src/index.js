@@ -39,6 +39,8 @@ window.emit = (modelAction, data) => {
         }
       }, TIMEOUT_DURATION);
     });
+  }).catch((error) => {
+    console.log(modelAction + ' request failed', error);
   });
 };
 

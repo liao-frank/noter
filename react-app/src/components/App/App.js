@@ -28,7 +28,7 @@ class App extends Component {
       updateModal: this.updateModal.bind(this),
     };
 
-    this.updateUser('5bf7a64216729b50396b9634');
+    this.updateUser('5c01e1eda2e370979e0b893c');
   }
 
   render() {
@@ -143,8 +143,12 @@ class App extends Component {
     }
   }
 
-  updateSelected(type, item, openOnly=false) {
+  updateSelected(type, item, openOnly=false, onlyOpen=false) {
     const { selected: prevSelected } = this.state;
+
+    if (onlyOpen && !prevSelected) {
+      return;
+    }
 
     const notSpecified = !type && !item;
     const sameSpecified = !notSpecified && prevSelected && item._id === prevSelected.item._id;

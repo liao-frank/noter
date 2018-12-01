@@ -1,0 +1,21 @@
+.dropdown {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+
+  border-radius: var(--small-border-radius);
+  box-shadow: var(--large-box-shadow);
+  background-color: #ffffff;
+
+  transform: translateY(-10%);
+  transition: all var(--fast-transition);
+}
+
+.dropdown.open {
+  visibility: visible;
+  opacity: 1;
+
+  transform: translateY(0);
+}

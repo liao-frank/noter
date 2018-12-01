@@ -7,27 +7,31 @@
   flex-wrap: wrap;
 }
 
-.directory .section.folders .card {
+.directory .section .card {
   display: inline-block;
   flex: 0 1 20%;
-  max-width: 225px;
+  max-width: 200px;
   min-width: 175px;
   margin: var(--vertical-padding) var(--horizontal-padding) var(--vertical-padding) 0;
 
   user-select: none;
 }
-.directory .section.folders .card.selected {
+.directory .section .card.selected {
   color: var(--purple);
   background-color: var(--purple-background);
   box-shadow: none;
 }
-.directory .section.folders .card .flex-row {
+.directory .section .card .dropdown .button {
+  font-family: inherit;
+  color: var(--primary-color);
+}
+.directory .section .card .flex-row {
   align-items: center;
 }
-.directory .section.folders .card .icon {
+.directory .section .card .icon {
   flex-basis: 24px;
 }
-.directory .section.folders .card .name {
+.directory .section .card .name {
   overflow: hidden;
   flex: 1;
   min-width: 0;

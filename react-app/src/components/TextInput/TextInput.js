@@ -43,6 +43,13 @@ class TextInput extends PureComponent {
     );
   }
 
+  componentDidMount() {
+    const { autofocus } = this.props;
+    if (autofocus) {
+      this.inputNode.select();
+    }
+  }
+
   focus() {
     if (this.inputNode) {
       this.inputNode.focus();

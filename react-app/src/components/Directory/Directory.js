@@ -8,8 +8,14 @@ import Breadcrumbs from 'components/Breadcrumbs';
 import Topbar from 'components/Topbar';
 import DetailSidebar from 'components/DetailSidebar';
 import Search from 'components/Search';
+import Button from 'components/Button';
+import Dropdown from 'components/Dropdown';
 
 import './Directory.css';
+import GrayFolderIcon from 'icons/folder-gray.svg';
+import PurpleFolderIcon from 'icons/folder-purple.svg';
+import GrayNoteIcon from 'icons/note-gray.svg';
+import PurpleNoteIcon from 'icons/note-purple.svg';
 
 class Directory extends Component {
   constructor(props) {
@@ -82,14 +88,51 @@ class Directory extends Component {
   }
 
   renderNotes(context) {
-    const { notes } = context.folder;
+    const {
+      folder, updateFolder,
+      showingSelected, selected, updateSelected
+    } = context;
+    const { notes } = folder;
 
-    if (!notes || !notes.length) {
-      return null;
-    }
+    if (!notes || !notes.length) return null;
+
+    const cards = notes.map((note) => {
+      if (!note) return null;
+      const isSelected = showingSelected && selected && note._id === selected.item._id;
+      const icon = isSelected ? PurpleNoteIcon : GrayNoteIcon;
+
+      return (
+        <Card
+          key={note._id}
+          onClick={() => { updateSelected('note', note, true) }}
+          onDoubleClick={() => { console.log(note._id) }}
+          onRightClick={() => { updateSelected('note', note, true, true) }}
+          className={isSelected ? 'selected' : null}
+          dropdown={
+            <Dropdown buttonType="transparent" buttonSize="small">
+              <Button icon="trash-gray"
+                onClick={() => {
+                  window
+                    .emit('note#deleteOne', { query: { _id: note._id } })
+                    .then(() => { updateFolder() });
+                }}
+              >Delete</Button>
+            </Dropdown>
+          }
+        >
+          <div className="flex-row">
+            <div className="icon icon-24"
+              style={{ backgroundImage: `url(${icon})` }}
+            ></div>
+            <div className="name">{ note.name }</div>
+          </div>
+        </Card>
+      );
+    });
+
     return (
       <Section title="Notes">
-
+        <div className="flex-row">{ cards }</div>
       </Section>
     );
   }
@@ -106,21 +149,31 @@ class Directory extends Component {
     }
 
     const cards = folders.map((folder) => {
-      if (typeof folder !== 'object') {
-        return null;
-      }
-
       const isSelected = showingSelected && selected && folder._id === selected.item._id;
-      const icon = isSelected ? 'icon-folder-purple' : 'icon-folder';
+      const icon = isSelected ? PurpleFolderIcon : GrayFolderIcon;
       return (
         <Card
           key={folder._id}
-          onClick={() => { updateSelected('folder', folder) }}
+          onClick={() => { updateSelected('folder', folder, true) }}
           onDoubleClick={() => { updateFolder(folder._id) }}
+          onRightClick={() => { updateSelected('folder', folder, true, true) }}
           className={isSelected ? 'selected' : null}
+          dropdown={
+            <Dropdown buttonType="transparent" buttonSize="small">
+              <Button icon="trash-gray"
+                onClick={() => {
+                  window
+                    .emit('folder#deleteOne', { query: { _id: folder._id } })
+                    .then((result) => { updateFolder() });
+                }}
+              >Delete</Button>
+            </Dropdown>
+          }
         >
           <div className="flex-row">
-            <div className={'icon icon-24 ' + icon}></div>
+            <div className="icon icon-24"
+              style={{ backgroundImage: `url(${icon})` }}
+            ></div>
             <div className="name">{ folder.name }</div>
           </div>
         </Card>
@@ -129,10 +182,16 @@ class Directory extends Component {
 
     return (
       <Section title="Folders">
-        <div className="flex-row">
-          { cards }
-        </div>
+        <div className="flex-row">{ cards }</div>
       </Section>
+    );
+  }
+
+  renderDropdown(type, context) {
+    return (
+      <Dropdown top="100%" left="0">
+
+      </Dropdown>
     );
   }
 
