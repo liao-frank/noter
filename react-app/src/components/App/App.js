@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { keyBy } from 'lodash';
+import { Route } from 'react-router-dom';
+import * as ROUTES from 'consts/routes';
 import * as orderings from 'consts/orderings';
-import { VIEWS, PAGES } from 'consts/pages';
+import Directory from 'components/Directory';
+
 import './App.css';
 
 const AppContext = React.createContext();
@@ -22,31 +25,41 @@ class App extends Component {
       selected: undefined,
       updateSelected: this.updateSelected.bind(this),
       // Note Editor data
-      page: PAGES.DIRECTORY,
+      // page: PAGES.DIRECTORY,
       showingModal: false,
       modal: null,
       updateModal: this.updateModal.bind(this),
     };
+
+    window.browserHistory.listen(this.listenHistory.bind(this));
 
     this.updateUser('5c01e1eda2e370979e0b893c');
   }
 
   render() {
     const {
-      page,
       showingModal, modal: ModalComponent,
     } = this.state;
 
     return (
       <AppContext.Provider value={this.state}>
         <div className="app flex-row">
-          { VIEWS[page] }
+          <Route path={ROUTES.FOLDER + '/:id'} component={Directory} />
           { ModalComponent &&
             React.cloneElement(ModalComponent, { showing: showingModal })
           }
         </div>
       </AppContext.Provider>
     );
+  }
+
+  listenHistory({ pathname }, action) {
+    if (pathname.startsWith(ROUTES.FOLDER)) {
+      this.updateFolder(pathname.split('/')[2]);
+    }
+    else {
+      return false;
+    }
   }
 
   updateUser(id) {
@@ -58,7 +71,9 @@ class App extends Component {
           this.setState({ user: result.doc }, () => {
             const { user } = this.state;
             if (!prevUser || prevUser._id !== user._id) {
-              this.updateFolder(user.myNotes);
+              if (this.listenHistory(window.location) === false) {
+                window.browserHistory.push(`${ROUTES.FOLDER}/${user.myNotes}`);
+              }
             }
           });
         }

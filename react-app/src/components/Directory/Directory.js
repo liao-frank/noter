@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { keyBy } from 'lodash';
+import * as ROUTES from 'consts/routes';
 import { AppConsumer } from 'components/App';
 import DirectorySidebar from 'components/DirectorySidebar';
 import Card from 'components/Card';
@@ -46,7 +47,7 @@ class Directory extends Component {
                     onClick={(item) => {
                       const map = keyBy(context.breadcrumbs, 'name');
                       if (item.name in map) {
-                        context.updateFolder(map[item.name]['_id']);
+                        window.browserHistory.push(ROUTES.FOLDER + '/' + map[item.name]['_id']);
                       }
                     }}
                   />
@@ -155,7 +156,9 @@ class Directory extends Component {
         <Card
           key={folder._id}
           onClick={() => { updateSelected('folder', folder, true) }}
-          onDoubleClick={() => { updateFolder(folder._id) }}
+          onDoubleClick={() => {
+            window.browserHistory.push(ROUTES.FOLDER + '/' + folder._id);
+          }}
           onRightClick={() => { updateSelected('folder', folder, true, true) }}
           className={isSelected ? 'selected' : null}
           dropdown={

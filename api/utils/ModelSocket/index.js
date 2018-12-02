@@ -2,7 +2,7 @@ const ModelSocket = require(__dirname + '/ModelSocket.js');
 
 const attachSocketClass = (io, model, SocketClass) => {
   const { modelName } = model;
-  const nsp = io.of('/' + modelName.toLowerCase());
+  const nsp = io.of('/api/' + modelName.toLowerCase());
 
   let actions = Object.getOwnPropertyNames(SocketClass.__proto__);
   let defaultActions = Object.getOwnPropertyNames(ModelSocket.prototype);

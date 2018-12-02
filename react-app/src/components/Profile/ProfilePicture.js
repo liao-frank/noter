@@ -40,7 +40,7 @@ const ProfilePicture = (props) => {
         </h3>
       </div>
       <div className="profile-image" style={{
-        backgroundImage: `url(images/${imageName})`
+        backgroundImage: `url(/images/${imageName})`
       }}></div>
       { tooltip &&
         <div className="tooltip">{ tooltip }</div>

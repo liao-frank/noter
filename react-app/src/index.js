@@ -2,16 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import { API_URL, TIMEOUT_DURATION } from 'consts/api';
-import {
-  BrowserRouter as Router,
-  // Route,
-  // Link
-} from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import createBrowserHistory from 'history/createBrowserHistory';
 import App from 'components/App';
 import registerServiceWorker from './registerServiceWorker';
 
 import './normalize.css';
 import './index.css';
+
+window.browserHistory = createBrowserHistory();
 
 window.emit = (modelAction, data) => {
   const segments = modelAction.split('#');
@@ -46,7 +45,7 @@ window.emit = (modelAction, data) => {
 
 ReactDOM.render(
   (
-    <Router>
+    <Router history={window.browserHistory}>
       <App/>
     </Router>
   ),

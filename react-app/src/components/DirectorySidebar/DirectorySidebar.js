@@ -1,4 +1,5 @@
 import React from 'react';
+import * as ROUTES from 'consts/routes';
 import { AppConsumer } from 'components/App';
 import Sidebar from 'components/Sidebar';
 import Button from 'components/Button';
@@ -40,7 +41,7 @@ const renderLinks = (context) => {
 };
 
 const renderLink = (context, linkedFolderId, text, icon=null) => {
-  const { breadcrumbs, updateFolder } = context;
+  const { breadcrumbs } = context;
   const activeFolder = breadcrumbs[0];
   const activeFolderId = activeFolder && activeFolder._id;
   const isActive = activeFolderId === linkedFolderId;
@@ -51,7 +52,7 @@ const renderLink = (context, linkedFolderId, text, icon=null) => {
       icon={icon + (isActive ? '-purple' : '-gray')}
       className={isActive ? 'active' : null}
       onClick={isActive ? null : () => {
-        updateFolder(linkedFolderId);
+        window.browserHistory.push(ROUTES.FOLDER + '/' + linkedFolderId);
       }}
     >
       { text }
