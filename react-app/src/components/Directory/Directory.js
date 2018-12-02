@@ -47,7 +47,7 @@ class Directory extends Component {
                     onClick={(item) => {
                       const map = keyBy(context.breadcrumbs, 'name');
                       if (item.name in map) {
-                        window.browserHistory.push(ROUTES.FOLDER + '/' + map[item.name]['_id']);
+                        window.browserHistory.push(`${ROUTES.FOLDER}/${map[item.name]['_id']}`);
                       }
                     }}
                   />
@@ -65,10 +65,11 @@ class Directory extends Component {
   }
 
   renderDirectory(context) {
+    const { folder } = context;
     const folders = this.renderFolders(context);
     const notes = this.renderNotes(context);
 
-    if (!folders && !notes) {
+    if (Object.keys(folder).length && !folders && !notes) {
       return (
         <div className="empty-directory">
           <div className="message">
@@ -106,7 +107,9 @@ class Directory extends Component {
         <Card
           key={note._id}
           onClick={() => { updateSelected('note', note, true) }}
-          onDoubleClick={() => { console.log(note._id) }}
+          onDoubleClick={() => {
+            window.browserHistory.push(`${ROUTES.NOTE}/${note._id}`)
+          }}
           onRightClick={() => { updateSelected('note', note, true, true) }}
           className={isSelected ? 'selected' : null}
           dropdown={
@@ -157,7 +160,7 @@ class Directory extends Component {
           key={folder._id}
           onClick={() => { updateSelected('folder', folder, true) }}
           onDoubleClick={() => {
-            window.browserHistory.push(ROUTES.FOLDER + '/' + folder._id);
+            window.browserHistory.push(`${ROUTES.FOLDER}/${folder._id}`);
           }}
           onRightClick={() => { updateSelected('folder', folder, true, true) }}
           className={isSelected ? 'selected' : null}

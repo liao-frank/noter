@@ -3,6 +3,7 @@ import { keyBy } from 'lodash';
 import { Route } from 'react-router-dom';
 import * as ROUTES from 'consts/routes';
 import * as orderings from 'consts/orderings';
+import NoteEditor from 'components/NoteEditor';
 import Directory from 'components/Directory';
 
 import './App.css';
@@ -13,7 +14,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // Directory data
       user: {},
       updateUser: this.updateUser.bind(this),
       folder: {},
@@ -24,8 +24,6 @@ class App extends Component {
       showingSelected: false,
       selected: undefined,
       updateSelected: this.updateSelected.bind(this),
-      // Note Editor data
-      // page: PAGES.DIRECTORY,
       showingModal: false,
       modal: null,
       updateModal: this.updateModal.bind(this),
@@ -45,6 +43,7 @@ class App extends Component {
       <AppContext.Provider value={this.state}>
         <div className="app flex-row">
           <Route path={ROUTES.FOLDER + '/:id'} component={Directory} />
+          <Route path={ROUTES.NOTE + '/:id'} component={NoteEditor}/>
           { ModalComponent &&
             React.cloneElement(ModalComponent, { showing: showingModal })
           }
@@ -54,7 +53,11 @@ class App extends Component {
   }
 
   listenHistory({ pathname }, action) {
-    if (pathname.startsWith(ROUTES.FOLDER)) {
+    if (pathname === '/') {
+      const { user } = this.state;
+      window.browserHistory.push(`${ROUTES.FOLDER}/${user.myNotes}`);
+    }
+    else if (pathname.startsWith(ROUTES.FOLDER)) {
       this.updateFolder(pathname.split('/')[2]);
     }
     else {
@@ -64,16 +67,15 @@ class App extends Component {
 
   updateUser(id) {
     const query = { _id: id };
-    window.emit('user#findOne', { query })
+    window
+      .emit('user#findOne', { query })
       .then((result) => {
         const { user: prevUser } = this.state;
         if (result.doc) {
           this.setState({ user: result.doc }, () => {
             const { user } = this.state;
             if (!prevUser || prevUser._id !== user._id) {
-              if (this.listenHistory(window.location) === false) {
-                window.browserHistory.push(`${ROUTES.FOLDER}/${user.myNotes}`);
-              }
+              this.listenHistory(window.location);
             }
           });
         }
@@ -88,7 +90,8 @@ class App extends Component {
     if (!id) {
       query._id = this.state.folder._id;
     }
-    window.emit('folder#findOne', { query })
+    window
+      .emit('folder#findOne', { query })
       .then((result) => {
         const folder = result.doc;
         this.updateSubfolders(folder)
@@ -111,7 +114,8 @@ class App extends Component {
         _id: { $in: folder.folders }
       };
       promises.push(
-        window.emit('folder#find', { query })
+        window
+          .emit('folder#find', { query })
           .then((result) => {
             const folderMap = keyBy(result.docs, '_id');
             const folders = folder.folders.map(id => folderMap[id]);
@@ -125,7 +129,8 @@ class App extends Component {
         _id: { $in: folder.notes }
       };
       promises.push(
-        window.emit('note#find', { query })
+        window
+          .emit('note#find', { query })
           .then((result) => {
             const noteMap = keyBy(result.docs, '_id');
             const notes = folder.notes.map(id => noteMap[id]);
@@ -201,7 +206,8 @@ class App extends Component {
       );
     });
 
-    return Promise.all(promises)
+    return Promise
+      .all(promises)
       .then((results) => {
         const users = results.map(result => result.doc);
         const userMap = keyBy(users, '_id');

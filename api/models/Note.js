@@ -9,7 +9,7 @@ const noteSchema = new Schema({
   categories: [String],
   created: Date, createdBy: ObjectId,
   modified: Date, modifiedBy: ObjectId,
-  content: String,
+  content: { type: String, default: '' }
   // TODO tags
 });
 
