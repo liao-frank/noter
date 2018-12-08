@@ -7,6 +7,7 @@ const noteSchema = new Schema({
   owner: ObjectId,
   members: [ObjectId],
   categories: [String],
+  tags: [String],
   created: Date, createdBy: ObjectId,
   modified: Date, modifiedBy: ObjectId,
   content: { type: String, default: '' }

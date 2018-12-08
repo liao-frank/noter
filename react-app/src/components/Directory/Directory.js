@@ -108,7 +108,7 @@ class Directory extends Component {
           key={note._id}
           onClick={() => { updateSelected('note', note, true) }}
           onDoubleClick={() => {
-            window.browserHistory.push(`${ROUTES.NOTE}/${note._id}`)
+            window.open(`${ROUTES.NOTE}/${note._id}`, '_blank').focus();
           }}
           onRightClick={() => { updateSelected('note', note, true, true) }}
           className={isSelected ? 'selected' : null}
@@ -117,7 +117,10 @@ class Directory extends Component {
               <Button icon="trash-gray"
                 onClick={() => {
                   window
-                    .emit('note#deleteOne', { query: { _id: note._id } })
+                    .emit('note#deleteOne', { query: {
+                      _id: note._id,
+                      parent: folder._id
+                    } })
                     .then(() => { updateFolder() });
                 }}
               >Delete</Button>

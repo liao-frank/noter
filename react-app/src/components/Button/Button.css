@@ -17,6 +17,9 @@
   user-select: none;
   cursor: pointer;
 }
+.button.with-icon {
+  padding-right: calc(2 * var(--horizontal-padding));
+}
 .button.small {
   padding: 10px var(--horizontal-padding);
 }

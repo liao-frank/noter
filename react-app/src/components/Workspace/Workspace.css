@@ -1,0 +1,64 @@
+.workspace {
+
+}
+
+.workspace .topbar {
+  display: flex;
+  position: fixed;
+  width: 100%;
+
+  flex-basis: auto;
+  justify-content: center;
+  background-color: var(--primary-background);
+
+  z-index: 1;
+}
+
+.workspace .topbar .container {
+    max-width: 840px;
+}
+
+.workspace .topbar .container > * {
+  align-items: center;
+}
+
+.workspace .topbar .container .left {
+  flex: 0 1;
+}
+
+.workspace .topbar .container .left .icon-noter {
+  margin: 0 var(--horizontal-padding);
+}
+
+.workspace .topbar .container .left .separator-vertical {
+  margin-left: var(--horizontal-padding);
+}
+
+.workspace .topbar .container .center {
+  margin-left: calc(2 * var(--horizontal-padding));
+  margin-right: calc(2 * var(--horizontal-padding));
+}
+
+.workspace .topbar .container .right {
+  flex: 0 1;
+}
+
+.workspace .topbar .container .right .separator-vertical {
+  margin-left: calc(2 * var(--horizontal-padding));
+  margin-right: calc(2 * var(--horizontal-padding));
+}
+
+.workspace .topbar .container .right .icon {
+  margin: 0 var(--horizontal-padding);
+}
+
+.workspace .topbar .container .right .icon {
+  margin: 0 var(--horizontal-padding);
+}
+
+.workspace .space {
+  display: flex;
+  padding: calc( 4 * var(--vertical-padding)) 0;
+  padding-top: calc( 4 * var(--vertical-padding) + 80px);
+  justify-content: center;
+}

@@ -38,6 +38,15 @@ class UserSocket extends ModelSocket {
       });
   }
 
+  findOne(data) {
+    if (data.query && data.query.password) {
+      data.query.passwordHash = md5(data.query.password);
+      data.query.password = undefined;
+    }
+
+    return super.findOne(data);
+  }
+
   _createInitialFolders(user) {
     const { _id: userId } = user;
     const folder = {

@@ -1,0 +1,16 @@
+.login-modal .logo-noter {
+  font-size: 24px;
+}
+
+.login-modal .title {
+  margin-bottom: var(--vertical-padding);
+  margin-top: calc(2 * var(--vertical-padding));
+}
+
+.login-modal .text-input {
+  margin: calc(2 * var(--vertical-padding)) 0;
+}
+
+.login-modal .error {
+  animation-duration: 0.4s;
+}

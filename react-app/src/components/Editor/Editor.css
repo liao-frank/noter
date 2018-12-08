@@ -1,0 +1,28 @@
+.editor {
+  display: flex;
+
+  overflow: hidden;
+  /* min-height: 950px; */
+  width: 100vw;
+  flex-basis: 100vw;
+  max-width: 840px;
+
+  border-radius: var(--large-border-radius);
+  background-color: var(--primary-background);
+  box-shadow: var(--large-box-shadow);
+
+  color: #131317;
+}
+
+.ql-noter .ql-toolbar {
+  padding: var(--vertical-padding) var(--horizontal-padding);
+  border: none;
+  border-bottom: var(--small-border);
+  /* background-color: var(--secondary-background); */
+}
+
+.ql-noter .ql-container {
+  flex: 1;
+  padding: calc( 1 * var(--vertical-padding) ) var(--horizontal-padding);
+  border: none;
+}

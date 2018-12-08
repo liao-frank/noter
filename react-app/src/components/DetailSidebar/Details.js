@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import CATEGORIES from 'consts/categories';
 import moment from 'moment';
 import { kebabCase } from 'lodash';
 import { AppConsumer } from 'components/App';
@@ -15,7 +16,6 @@ import XIcon from 'icons/x-gray.svg';
 - keyphrases
 - keywords/tags
 - categories
--
 */
 
 class Details extends PureComponent {
@@ -32,8 +32,8 @@ class Details extends PureComponent {
     return (
       <AppConsumer>
         { (context) => {
-          const { updateSelected } = context;
-          const { name, members } = context.selected.item;
+          const { selected, updateSelected } = context;
+          const { name, members } = selected.item;
           const memberNames = members.map(m => this.getName(m));
 
           return <Sidebar
@@ -56,6 +56,12 @@ class Details extends PureComponent {
                 tooltips={memberNames}
               />
             </Section>
+            { selected.type === 'note' &&
+              <Section className="categories-and-tags">
+                { this.renderCategories(context) }
+              </Section>
+            }
+            <div className="separator"></div>
             { this.renderMetadata(context) }
           </Sidebar>
         } }
@@ -71,7 +77,7 @@ class Details extends PureComponent {
     } = context.selected.item;
 
     return (
-      <Section className="info">
+      <Section className="metadata">
         <div className="detail flex-row">
           <span className="key">Owner</span>
           <span className="value">{ this.getName(owner) }</span>
@@ -89,6 +95,58 @@ class Details extends PureComponent {
           </span>
         </div>
       </Section>
+    );
+  }
+
+  renderCategories(context) {
+    const { folder, selected, updateSelected } = context;
+    const { item } = selected;
+
+    return (
+      <div className="detail">
+        <div className="key">Categories</div>
+        <div className="categories">
+          { Object.keys(CATEGORIES).map(category => (
+              <div
+                key={category}
+                className={'category' +
+                  (item.categories.includes(category) ? ' active' : '')}
+                style={{ backgroundColor: CATEGORIES[category] }}
+                onClick={() => {
+                  window
+                    .emit('note#updateOne', {
+                      query: { _id: item._id },
+                      doc: {
+                        [item.categories.includes(category) ?
+                          '$pull' :
+                          '$addToSet']: { categories: category }
+                      },
+                      options: { new: true }
+                    })
+                    .then(({ raw }) => {
+                      folder.notes.find((e) => {
+                        if (e._id === raw._id) {
+                          e.categories = raw.categories;
+                          updateSelected('note', e, true);
+                          return true;
+                        }
+                        return false;
+                      });
+                    });
+                }}
+              ></div>
+            )) }
+        </div>
+      </div>
+    );
+  }
+
+  renderTags(context) {
+
+    return (
+      <div className="detail">
+        <div className="key">Tags</div>
+      </div>
     );
   }
 

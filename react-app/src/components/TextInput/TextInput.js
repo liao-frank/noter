@@ -19,6 +19,7 @@ class TextInput extends PureComponent {
     const {
       // onChange,
       id,
+      type,
       className,
       placeholder,
       defaultValue
@@ -34,7 +35,7 @@ class TextInput extends PureComponent {
       >
         <input
           id={id || null}
-          type="text"
+          type={type || 'text'}
           placeholder={placeholder || null}
           defaultValue={defaultValue || null}
           ref={(node) => { this.inputNode = node }}

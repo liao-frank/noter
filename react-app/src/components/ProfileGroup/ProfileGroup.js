@@ -12,6 +12,10 @@ const ProfileGroup = (props) => {
 
   const newSize = parseInt(size, 10) + 8;  // includes border
 
+  const groupStyle = {
+    marginRight: newSize * 0.3 - 4 + 'px'
+  };
+
   const containerStyle = {
     width: newSize * 0.7 + 'px',
     height: newSize + 'px',
@@ -40,7 +44,9 @@ const ProfileGroup = (props) => {
   });
 
   return (
-    <div className="profile-group">
+    <div
+      className="profile-group"
+      style={groupStyle}>
       { profiles }
     </div>
   );

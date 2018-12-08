@@ -13,6 +13,7 @@
   --purple: #787fe8;
   --purple-background: rgba(120, 127, 232, 0.15);
   --pink: #d8a2f4;
+  --carnation: #f36d5b;
   --primary-gradient: linear-gradient(to top right, #607ce0, #9187e4, #d8a2f4);
 
   --small-border: solid 1px #e1e2e6;
@@ -85,9 +86,21 @@ p {
   background-color: #e1e2e6;
 }
 
+.separator-vertical {
+  width: 1px;
+  height: calc(100% - 2 * var(--vertical-padding));
+  margin: var(--vertical-padding) 0;
+  background-color: #e1e2e6;
+}
+
 .flex-row {
   display: flex;
   flex: 1;
+}
+.container {
+  width: 100vw;
+  flex-basis: 100vw;
+  max-width: 950px;
 }
 .flex-col {
   display: flex;
@@ -102,7 +115,8 @@ p {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-
+}
+.icon {
   cursor: pointer;
 }
 .icon-16 {
@@ -117,7 +131,14 @@ p {
   width: 32px;
   height: 32px;
 }
+.icon-64 {
+  width: 64px;
+  height: 64px;
+}
 
+.icon-noter {
+  background-image: url('icons/noter.svg');
+}
 .icon-right-arrow {
   background-image: url('icons/right-arrow-black.svg');
 }
@@ -127,12 +148,26 @@ p {
 .icon-folder-purple {
   background-image: url('icons/folder-purple.svg');
 }
-
+.logo-noter {
+  position: relative;
+  white-space: nowrap;
+}
 .logo-noter:before {
+  display: inline-block;
   content: 'noter';
+  padding-right: 2.5%;
+
   font-family: Montserrat, sans-serif;
   color: #131317;
   font-weight: 700;
+}
+.logo-noter:after {
+  display: inline-block;
+  content: '';
+  width: 7.5%;
+  padding-top: 7.5%;
+  border-radius: 100%;
+  background: var(--primary-gradient);
 }
 
 .selectable {
@@ -145,4 +180,12 @@ p {
 
 .clickable {
   cursor: pointer;
+}
+
+.error {
+  color: var(--carnation);
+}
+
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+  background-color: inherit !important;
 }

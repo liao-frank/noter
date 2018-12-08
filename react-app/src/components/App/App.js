@@ -3,10 +3,12 @@ import { keyBy } from 'lodash';
 import { Route } from 'react-router-dom';
 import * as ROUTES from 'consts/routes';
 import * as orderings from 'consts/orderings';
-import NoteEditor from 'components/NoteEditor';
+import Workspace from 'components/Workspace';
 import Directory from 'components/Directory';
+import LoginModal from 'components/LoginModal';
 
 import './App.css';
+import './animate.css';
 
 const AppContext = React.createContext();
 
@@ -29,21 +31,24 @@ class App extends Component {
       updateModal: this.updateModal.bind(this),
     };
 
-    window.browserHistory.listen(this.listenHistory.bind(this));
-
-    this.updateUser('5c01e1eda2e370979e0b893c');
+    window.browserHistory.listen(this.handleHistory.bind(this));
   }
 
   render() {
     const {
+      user,
       showingModal, modal: ModalComponent,
     } = this.state;
 
     return (
       <AppContext.Provider value={this.state}>
         <div className="app flex-row">
-          <Route path={ROUTES.FOLDER + '/:id'} component={Directory} />
-          <Route path={ROUTES.NOTE + '/:id'} component={NoteEditor}/>
+          { (user && Object.keys(user).length > 0) &&
+            <div className="flex-row">
+              <Route path={ROUTES.FOLDER + '/:id'} component={Directory} />
+              <Route path={ROUTES.NOTE + '/:id'} component={Workspace}/>
+            </div>
+          }
           { ModalComponent &&
             React.cloneElement(ModalComponent, { showing: showingModal })
           }
@@ -52,10 +57,25 @@ class App extends Component {
     );
   }
 
-  listenHistory({ pathname }, action) {
+  componentDidMount() {
+    const { user, updateUser, updateModal } = this.state;
+    if (!user || !Object.keys(user).length) {
+      const cookie = window.localStorage.getItem('user');
+      if (cookie) {
+        updateUser(JSON.parse(cookie));
+      }
+      else {
+        updateModal(
+          <LoginModal updateUser={updateUser} updateModal={updateModal} />
+        );
+      }
+    }
+  }
+
+  handleHistory({ pathname }, action) {
     if (pathname === '/') {
       const { user } = this.state;
-      window.browserHistory.push(`${ROUTES.FOLDER}/${user.myNotes}`);
+      window.browserHistory.replace(`${ROUTES.FOLDER}/${user.myNotes}`);
     }
     else if (pathname.startsWith(ROUTES.FOLDER)) {
       this.updateFolder(pathname.split('/')[2]);
@@ -65,9 +85,16 @@ class App extends Component {
     }
   }
 
-  updateUser(id) {
-    const query = { _id: id };
-    window
+  updateUser(query) {
+    const { modal, updateModal, updateUser } = this.state;
+
+    if (!query || Object.keys(query) === 0) {
+      this.setState({ user: {} });
+      updateModal(<LoginModal updateUser={updateUser} updateModal={updateModal}/>);
+      return Promise.resolve(false);
+    }
+    
+    return window
       .emit('user#findOne', { query })
       .then((result) => {
         const { user: prevUser } = this.state;
@@ -75,13 +102,15 @@ class App extends Component {
           this.setState({ user: result.doc }, () => {
             const { user } = this.state;
             if (!prevUser || prevUser._id !== user._id) {
-              this.listenHistory(window.location);
+              this.handleHistory(window.location);
             }
           });
+          return true;
         }
-        else {
-          console.error(`Failed to retrieve user ${id}`);
+        else if (!modal) {
+          updateModal(<LoginModal updateUser={updateUser} updateModal={updateModal}/>);
         }
+        return false;
       });
   }
 
@@ -97,6 +126,7 @@ class App extends Component {
         this.updateSubfolders(folder)
           .then(() => {
             this.setState({ folder });
+            document.title = folder.name;
             this.updateBreadcrumbs(folder);
             const { selected } = this.state;
             if (selected && !id) {

@@ -11,16 +11,22 @@ class Modal extends PureComponent {
     this.state = { showing: false };
     this.node = undefined;
     this.handleClick = this.handleClick.bind(this);
+    this.handleConfirm = this.handleConfirm.bind(this);
   }
 
   render() {
-    const { title, onConfirm, onCancel } = this.props;
+    const {
+      className,
+      title, onKeyPress,
+      onConfirm, onConfirmLabel,
+      onCancel, onCancelLabel
+    } = this.props;
     const { showing } = this.state;
 
-    const backgroundClassNames = ['modal-background'];
+    const backgroundClassNames = [ 'modal-background' ];
     showing && backgroundClassNames.push('visible');
 
-    const modalClassNames = ['modal'];
+    const modalClassNames = [ className, 'modal' ];
     showing && modalClassNames.push('visible');
 
     return (
@@ -28,9 +34,13 @@ class Modal extends PureComponent {
         <div
           className={modalClassNames.join(' ')}
           ref={(node) => { this.node = node }}
+          onKeyPress={(e) => { onKeyPress(e, this.node) }}
         >
           <Section>
-            <h3 className="title">{title}</h3>
+            { (typeof title === 'string') ?
+              <h3 className="title">{title}</h3> :
+              title
+            }
             { this.props.children }
             <AppConsumer>
               { (context) => {
@@ -41,18 +51,24 @@ class Modal extends PureComponent {
                     { onCancel &&
                       <Button type="transparent" size="small"
                         onClick={() => {
-                          onCancel();
-                          updateModal();
+                          const promise = onCancel();
+                          if (!promise) {
+                            updateModal();
+                          }
+                          else {
+                            promise.then((success) => {
+                              if (success) {
+                                updateModal();
+                              }
+                            });
+                          }
                         }}
-                      >Cancel</Button>
+                      >{ onCancelLabel || 'Cancel' }</Button>
                     }
                     { onConfirm &&
                       <Button type="purple" size="small"
-                        onClick={() => {
-                          onConfirm(this.node);
-                          updateModal();
-                        }}
-                      >Confirm</Button>
+                        onClick={this.handleConfirm}
+                      >{ onConfirmLabel || 'Confirm' }</Button>
                     }
                   </div>
               } }
@@ -61,6 +77,20 @@ class Modal extends PureComponent {
         </div>
       </div>
     );
+  }
+
+  handleConfirm() {
+    const promise = this.props.onConfirm(this.node);
+    if (!promise) {
+      this.updateModal();
+    }
+    else {
+      promise.then((success) => {
+        if (success) {
+          this.updateModal();
+        }
+      });
+    }
   }
 
   componentDidMount() {
@@ -74,15 +104,16 @@ class Modal extends PureComponent {
     document.removeEventListener('mousedown', this.handleClick, false);
   }
 
-  componentDidUpdate() {
-    if (!this.props.showing) {
-      this.setState({ showing: false });
-    }
-  }
+  // componentDidUpdate() {
+  //   if (this.props.showing === false) {
+  //     this.setState({ showing: false });
+  //   }
+  // }
 
   handleClick(e) {
+    const { requireAction } = this.props;
     const { node } = this;
-    if (node) {
+    if (node && !requireAction) {
       if (node.contains(e.target)) {
         return;
       }

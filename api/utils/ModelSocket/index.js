@@ -21,18 +21,23 @@ const attachSocketClass = (io, model, SocketClass) => {
   nsp.on('connection', (socket) => {
     for (const action of actions) {
       socket.on(action, (data) => {
-        SocketClass[action](data)
-          .then((result) => {
-            nsp.emit(action, result);
-          })
-          .catch((error) => {
-            const errorStr = error.toString();
-            const result = {
-              error: errorStr
-            };
-            error.stack && Object.assign(result, { trace: error.stack });
-            nsp.emit(action, result);
-          });
+        if (action.endsWith('_')) {
+          SocketClass[action](data, socket);
+        }
+        else {
+          SocketClass[action](data, socket)
+            .then((result) => {
+              socket.emit(action, result);
+            })
+            .catch((error) => {
+              const errorStr = error.toString();
+              const result = {
+                error: errorStr
+              };
+              error.stack && Object.assign(result, { trace: error.stack });
+              socket.emit(action, result);
+            });
+        }
       });
     }
   });

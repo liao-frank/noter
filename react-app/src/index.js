@@ -12,11 +12,16 @@ import './index.css';
 
 window.browserHistory = createBrowserHistory();
 
-window.emit = (modelAction, data) => {
+window.emit = (modelAction, data, socket) => {
   const segments = modelAction.split('#');
   const model = segments[0];
   const action = segments[1];
-  const socket = io.connect(API_URL + model.toLowerCase());
+  if (socket) {
+    socket.emit(action, data);
+    return;
+  }
+
+  socket = io.connect(API_URL + model.toLowerCase());
 
   return new Promise((resolve, reject) => {
     socket.on('connect', () => {
@@ -41,6 +46,24 @@ window.emit = (modelAction, data) => {
   }).catch((error) => {
     console.log(modelAction + ' request failed', error);
   });
+};
+
+window.listen = (modelAction, callback) => {
+  const segments = modelAction.split('#');
+  const model = segments[0];
+  const action = segments[1];
+  const socket = io.connect(API_URL + model.toLowerCase());
+
+  if (Array.isArray(callback)) {
+    for (const cb of callback) {
+      socket.on(action, cb);
+    }
+  }
+  else if (typeof callback === 'function') {
+    socket.on(action, callback);
+  }
+
+  return socket;
 };
 
 ReactDOM.render(

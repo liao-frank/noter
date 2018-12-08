@@ -5,7 +5,8 @@ import './Dropdown.css';
 const Dropdown = (props) => {
   const {
     open, getRef,
-    top, right, bottom, left
+    width,
+    top, right, bottom, left,
   } = props;
 
   const classNames = ['dropdown'];
@@ -15,7 +16,8 @@ const Dropdown = (props) => {
     top: top || null,
     right: right || null,
     bottom: bottom || null,
-    left: left || null
+    left: left || null,
+    width: width || null
   };
 
   const buttonProps = Object.keys(props).reduce((buttonProps, key) => {

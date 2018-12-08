@@ -1,18 +1,9 @@
 import React from 'react';
+import CATEGORIES from 'consts/categories';
 
 import './ProfilePicture.css';
 
-const baseColors = [
-  '#ED5565',
-  '#FC6E51',
-  '#FFCE54',
-  '#A0D468',
-  '#48CFAD',
-  '#4FC1E9',
-  '#5D9CEC',
-  '#AC92EC',
-  '#EC87C0'
-];
+const baseColors = Object.values(CATEGORIES);
 
 const ProfilePicture = (props) => {
   const {

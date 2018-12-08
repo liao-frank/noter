@@ -14,7 +14,7 @@ class Button extends PureComponent {
   }
 
   render() {
-    const { size, type, align, uppercase, onClick, className } = this.props;
+    const { size, type, align, uppercase, onClick, className, icon } = this.props;
     const { iconPath } = this.state;
 
     const classNames = ['button'];
@@ -23,6 +23,7 @@ class Button extends PureComponent {
     align && classNames.push('align-' + align);
     uppercase && classNames.push('uppercase');
     className && classNames.push(className);
+    icon && classNames.push('with-icon');
 
     return (
       <div

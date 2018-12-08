@@ -11,3 +11,7 @@
 .directory-sidebar .directory-links .button.active:hover {
 
 }
+
+.directory-sidebar .footer .icon {
+  position: relative;
+}

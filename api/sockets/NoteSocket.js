@@ -3,9 +3,24 @@ const User = require(__dirname + '/../models/User.js');
 const Folder = require(__dirname + '/../models/Folder.js');
 
 class NoteSocket extends ModelSocket {
-  constructor(model) {
-    super(model);
-  }
+  // collaborate(data, socket) {
+  //   let content;
+  //
+  //   socket.on('onChange', (data) => {
+  //     content = data.content;
+  //     socket.broadcast.emit('onChange', data);
+  //   });
+  //
+  //   socket.on('receiveChange', (data) => {
+  //     content = data.content;
+  //   });
+  //
+  //   socket.on('disconnect', () => {
+  //     console.log(content);
+  //   });
+  //
+  //   return Promise.resolve(true);
+  // }
 
   create(data) {
     let docs = this._getDocs(data);
@@ -42,11 +57,21 @@ class NoteSocket extends ModelSocket {
       });
   }
 
+  updateOne_(data, socket) {
+    console.log('updateOne_');
+    return super
+      .updateOne(data)
+      .then((result) => {
+        socket.broadcast.emit('updateOne_', result);
+        return raw;
+      });
+  }
+
   deleteOne(data) {
     const { query } = data;
 
     const pullParentPromise = Folder.findOneAndUpdate(
-      { notes: query._id },
+      { _id: query.parent, notes: query._id },
       { $pull: { notes: query._id } }
     );
 

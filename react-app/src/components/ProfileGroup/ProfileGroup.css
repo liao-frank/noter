@@ -1,3 +1,7 @@
+.profile-group {
+  font-size: 0;
+}
+
 .profile-group .container {
   display: inline-block;
 }

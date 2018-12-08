@@ -27,8 +27,6 @@ class CreateMenu extends PureComponent {
 
   render() {
     const { open } = this.state;
-    // const menuClassNames = ['create-menu'];
-    // open && menuClassNames.push('open');
 
     return (
       <div className="create-button">
