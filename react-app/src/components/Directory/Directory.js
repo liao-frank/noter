@@ -1,34 +1,35 @@
 import React, { Component } from 'react';
 import { keyBy } from 'lodash';
 import * as ROUTES from 'consts/routes';
+import * as ORDERINGS from 'consts/orderings';
 import { AppConsumer } from 'components/App';
 import DirectorySidebar from 'components/DirectorySidebar';
-import Card from 'components/Card';
 import Section from 'components/Section';
 import Breadcrumbs from 'components/Breadcrumbs';
 import Topbar from 'components/Topbar';
 import DetailSidebar from 'components/DetailSidebar';
 import Search from 'components/Search';
-import Button from 'components/Button';
+import FolderDirectory from 'components/FolderDirectory';
+import NoteDirectory from 'components/NoteDirectory';
 import Dropdown from 'components/Dropdown';
+import Button from 'components/Button';
 
 import './Directory.css';
-import GrayFolderIcon from 'icons/folder-gray.svg';
-import PurpleFolderIcon from 'icons/folder-purple.svg';
-import GrayNoteIcon from 'icons/note-gray.svg';
-import PurpleNoteIcon from 'icons/note-purple.svg';
 
 class Directory extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      selected: {},
+      ordering: ORDERINGS.NAME,
+      orderingDirection: 'asc',
+      orderingCategories: false,
+      showingOrderings: false,
     };
+
+    this.handleClick = this.handleClick.bind(this);
   }
 
   render() {
-
     return (
       <div className="flex-row">
         <DirectorySidebar/>
@@ -64,12 +65,44 @@ class Directory extends Component {
     );
   }
 
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClick, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClick, false);
+  }
+
+  handleClick(e) {
+    const { orderingsNode } = this;
+    if (orderingsNode) {
+      if (orderingsNode.contains(e.target)) {
+        return;
+      }
+      else {
+        this.setState({ showingOrderings: false });
+      }
+    }
+  }
+
+  openOrderings() {
+    const { showingOrderings } = this.state;
+
+    if (!showingOrderings) {
+      this.setState({ showingOrderings: true });
+    }
+  }
+
   renderDirectory(context) {
     const { folder } = context;
-    const folders = this.renderFolders(context);
-    const notes = this.renderNotes(context);
+    const { folders, notes } = folder;
+    const { ordering, orderingDirection, orderingCategories } = this.state;
 
-    if (Object.keys(folder).length && !folders && !notes) {
+    if (
+      Object.keys(folder).length &&
+      (!folders || !folders.length) &&
+      (!notes || !notes.length)
+    ) {
       return (
         <div className="empty-directory">
           <div className="message">
@@ -81,132 +114,61 @@ class Directory extends Component {
         </div>
       );
     }
+
     return (
-      <Section>
-        { folders }
-        { notes }
+      <Section className="space">
+        { this.renderOrderings(context) }
+        { (folders) &&
+          <FolderDirectory context={context}
+            ordering={ordering} orderingDirection={orderingDirection}/>
+        }
+        { (notes) &&
+          <NoteDirectory context={context}
+            ordering={ordering} orderingDirection={orderingDirection} orderingCategories={orderingCategories}/>
+        }
       </Section>
-    );
-  }
-
-  renderNotes(context) {
-    const {
-      folder, updateFolder,
-      showingSelected, selected, updateSelected
-    } = context;
-    const { notes } = folder;
-
-    if (!notes || !notes.length) return null;
-
-    const cards = notes.map((note) => {
-      if (!note) return null;
-      const isSelected = showingSelected && selected && note._id === selected.item._id;
-      const icon = isSelected ? PurpleNoteIcon : GrayNoteIcon;
-
-      return (
-        <Card
-          key={note._id}
-          onClick={() => { updateSelected('note', note, true) }}
-          onDoubleClick={() => {
-            window.open(`${ROUTES.NOTE}/${note._id}`, '_blank').focus();
-          }}
-          onRightClick={() => { updateSelected('note', note, true, true) }}
-          className={isSelected ? 'selected' : null}
-          dropdown={
-            <Dropdown buttonType="transparent" buttonSize="small">
-              <Button icon="trash-gray"
-                onClick={() => {
-                  window
-                    .emit('note#deleteOne', { query: {
-                      _id: note._id,
-                      parent: folder._id
-                    } })
-                    .then(() => { updateFolder() });
-                }}
-              >Delete</Button>
-            </Dropdown>
-          }
-        >
-          <div className="flex-row">
-            <div className="icon icon-24"
-              style={{ backgroundImage: `url(${icon})` }}
-            ></div>
-            <div className="name">{ note.name }</div>
-          </div>
-        </Card>
-      );
-    });
-
-    return (
-      <Section title="Notes">
-        <div className="flex-row">{ cards }</div>
-      </Section>
-    );
-  }
-
-  renderFolders(context) {
-    const {
-      folder, updateFolder,
-      showingSelected, selected, updateSelected
-    } = context;
-    const { folders } = folder;
-
-    if (!folders || !folders.length) {
-      return null;
-    }
-
-    const cards = folders.map((folder) => {
-      const isSelected = showingSelected && selected && folder._id === selected.item._id;
-      const icon = isSelected ? PurpleFolderIcon : GrayFolderIcon;
-      return (
-        <Card
-          key={folder._id}
-          onClick={() => { updateSelected('folder', folder, true) }}
-          onDoubleClick={() => {
-            window.browserHistory.push(`${ROUTES.FOLDER}/${folder._id}`);
-          }}
-          onRightClick={() => { updateSelected('folder', folder, true, true) }}
-          className={isSelected ? 'selected' : null}
-          dropdown={
-            <Dropdown buttonType="transparent" buttonSize="small">
-              <Button icon="trash-gray"
-                onClick={() => {
-                  window
-                    .emit('folder#deleteOne', { query: { _id: folder._id } })
-                    .then((result) => { updateFolder() });
-                }}
-              >Delete</Button>
-            </Dropdown>
-          }
-        >
-          <div className="flex-row">
-            <div className="icon icon-24"
-              style={{ backgroundImage: `url(${icon})` }}
-            ></div>
-            <div className="name">{ folder.name }</div>
-          </div>
-        </Card>
-      );
-    });
-
-    return (
-      <Section title="Folders">
-        <div className="flex-row">{ cards }</div>
-      </Section>
-    );
-  }
-
-  renderDropdown(type, context) {
-    return (
-      <Dropdown top="100%" left="0">
-
-      </Dropdown>
     );
   }
 
   renderDetails(context) {
-    const { showingSelected, selected } = context;
-    return selected ? <DetailSidebar showing={showingSelected}/> : null;
+    const { showingSelected, selected, updateSelected } = context;
+    return selected ? <DetailSidebar showing={showingSelected} onClose={() => { updateSelected() }}/> : null;
+  }
+
+  renderOrderings(context) {
+    const { ordering, orderingDirection, orderingCategories, showingOrderings } = this.state;
+
+    return (
+      <div className="controls-ordering">
+        <Button className="button-ordering" type="transparent" width="fit-content"
+          onClick={() => { this.openOrderings() }}
+        >
+          { ordering }
+          <Dropdown
+            open={showingOrderings} top="100%" right="0" width="auto"
+            getRef={(node) => { this.orderingsNode = node }}
+          >
+            { Object.values(ORDERINGS).filter(option => typeof option === 'string').map(option => (
+              <Button
+                key={option} type="transparent" size="small"
+                icon={ordering === option ? 'checkmark-gray' : 'empty'}
+                onClick={() => { this.setState({ ordering: option, showingOrderings: false }) }}
+              >{option}</Button>
+            )) }
+          </Dropdown>
+        </Button>
+        <Button className="button-ordering-direction" type="transparent" width="fit-content"
+          icon={orderingDirection === 'asc' ? 'up-arrow-black' : 'down-arrow-black'}
+          onClick={() => {
+            this.setState({ orderingDirection: (orderingDirection === 'asc' ? 'desc' : 'asc')})
+          } }></Button>
+        <Button type="transparent" width="fit-content"
+          icon={orderingCategories ? 'rainbow-rainbow' : 'rainbow-black'}
+          onClick={() => {
+            this.setState({ orderingCategories: !orderingCategories })
+          } }></Button>
+      </div>
+    );
   }
 }
 

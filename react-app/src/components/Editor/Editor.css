@@ -14,6 +14,10 @@
   color: #131317;
 }
 
+#toolbar :focus {
+  outline: none;
+}
+
 .ql-noter .ql-toolbar {
   padding: var(--vertical-padding) var(--horizontal-padding);
   border: none;

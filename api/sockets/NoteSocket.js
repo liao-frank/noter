@@ -58,12 +58,20 @@ class NoteSocket extends ModelSocket {
   }
 
   updateOne_(data, socket) {
-    console.log('updateOne_');
     return super
       .updateOne(data)
       .then((result) => {
         socket.broadcast.emit('updateOne_', result);
-        return raw;
+        return result.raw;
+      });
+  }
+
+  editOne_(data, socket) {
+    return super
+      .updateOne(data)
+      .then((result) => {
+        socket.broadcast.emit('editOne_', result);
+        return result.raw;
       });
   }
 

@@ -2,12 +2,52 @@
 
 }
 
+.directory .section .directory-header > * {
+  display: inline-block;
+}
+.directory .section .directory-header > *:not(:first-child) {
+  margin-left: 6px;
+}
+
 .directory .section.folders .flex-row,
 .directory .section.notes .flex-row {
   flex-wrap: wrap;
 }
 
-.directory .section .card {
+.directory .space {
+  overflow-y: scroll;
+  position: relative;
+  max-height: calc(100vh - 65px * 2);
+}
+
+.directory .space .controls-ordering {
+  display: flex;
+  position: absolute;
+  top: calc(2 * var(--vertical-padding) + 18.6px - 14px);
+  right: calc(2 * var(--horizontal-padding));
+}
+
+.directory .space .controls-ordering .button {
+  padding: 6px 8px;
+}
+
+.directory .space .controls-ordering .button-ordering {
+  overflow: visible;
+}
+
+.directory .space .controls-ordering .button-ordering .dropdown .button {
+  font-family: var(--primary-font-family);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: var(--primary-color);
+}
+
+.directory .space .section .flex-row:last-child {
+  flex-wrap: wrap;
+}
+
+.directory .space .card {
   display: inline-block;
   flex: 0 1 20%;
   max-width: 200px;
@@ -16,22 +56,22 @@
 
   user-select: none;
 }
-.directory .section .card.selected {
+.directory .space .card.selected {
   color: var(--purple);
   background-color: var(--purple-background);
   box-shadow: none;
 }
-.directory .section .card .dropdown .button {
+.directory .space .card .dropdown .button {
   font-family: inherit;
   color: var(--primary-color);
 }
-.directory .section .card .flex-row {
+.directory .space .card .flex-row {
   align-items: center;
 }
-.directory .section .card .icon {
+.directory .space .card .icon {
   flex-basis: 24px;
 }
-.directory .section .card .name {
+.directory .space .card .name {
   overflow: hidden;
   flex: 1;
   min-width: 0;

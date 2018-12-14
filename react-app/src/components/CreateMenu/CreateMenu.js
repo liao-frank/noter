@@ -124,6 +124,7 @@ class CreateMenu extends PureComponent {
             });
         }
       }}
+      onKeyPress={(e, node, self) => { e.key === 'Enter' && self.handleConfirm() }}
     >
       <TextInput
         id={inputId} autofocus

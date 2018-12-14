@@ -26,9 +26,11 @@ class DirectorySidebar extends Component {
         { (context) => {
             return (
               <Sidebar className="directory-sidebar">
-                <div className="logo logo-noter"
-                  onClick={() => { window.browserHistory.push('/') }}
-                ></div>
+                <div className="flex-row" style={{ position: 'relative' }}>
+                  <div className="logo logo-noter"
+                    onClick={() => { window.browserHistory.push('/') }}
+                  ><div className="alpha">v0.10.0</div></div>
+                </div>
                 <div className="separator"></div>
                 <CreateMenu/>
                 { this.renderLinks(context) }
@@ -47,13 +49,6 @@ class DirectorySidebar extends Component {
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClick, false);
   }
-
-  // closeUserMenu() {
-  //   const { userMenuOpen } = this.state;
-  //   if (userMenuOpen) {
-  //     this.setState({ userMenuOpen: false });
-  //   }
-  // }
 
   handleClick(e) {
     const { userMenuNode } = this;

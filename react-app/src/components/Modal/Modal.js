@@ -8,7 +8,8 @@ import './Modal.css';
 class Modal extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { showing: false };
+
+    this.state = { showing: props.showing };
     this.node = undefined;
     this.handleClick = this.handleClick.bind(this);
     this.handleConfirm = this.handleConfirm.bind(this);
@@ -19,7 +20,7 @@ class Modal extends PureComponent {
       className,
       title, onKeyPress,
       onConfirm, onConfirmLabel,
-      onCancel, onCancelLabel
+      onCancel, onCancelLabel,
     } = this.props;
     const { showing } = this.state;
 
@@ -29,12 +30,13 @@ class Modal extends PureComponent {
     const modalClassNames = [ className, 'modal' ];
     showing && modalClassNames.push('visible');
 
+    const modalOnKeyPress = onKeyPress && ((e) => { onKeyPress(e, this.node, this) });
     return (
       <div className={backgroundClassNames.join(' ')}>
         <div
           className={modalClassNames.join(' ')}
           ref={(node) => { this.node = node }}
-          onKeyPress={(e) => { onKeyPress(e, this.node) }}
+          onKeyPress={modalOnKeyPress}
         >
           <Section>
             { (typeof title === 'string') ?
@@ -104,11 +106,11 @@ class Modal extends PureComponent {
     document.removeEventListener('mousedown', this.handleClick, false);
   }
 
-  // componentDidUpdate() {
-  //   if (this.props.showing === false) {
-  //     this.setState({ showing: false });
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (prevProps.showing !== this.props.showing) {
+      this.setState({ showing: this.props.showing });
+    }
+  }
 
   handleClick(e) {
     const { requireAction } = this.props;

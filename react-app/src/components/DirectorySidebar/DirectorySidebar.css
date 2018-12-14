@@ -2,6 +2,18 @@
   /* overflow: auto; */
 }
 
+.directory-sidebar .alpha {
+  display: inline-block;
+  position: absolute;
+  bottom: 3px;
+  right: 6px;
+  padding: var(--vertical-padding) 4px;
+  font-size: 12px;
+  letter-spacing: 0.7px;
+
+  transform: translateX(100%);
+}
+
 .directory-sidebar .directory-links .button.active {
   color: var(--purple);
   background-color: var(--purple-background);

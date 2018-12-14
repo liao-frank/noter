@@ -73,6 +73,15 @@ class Card extends PureComponent {
     }
   }
 
+  componentDidUpdate() {
+    const { onClick } = this.props;
+    
+    this.debouncedOnClick = debounce(() => {
+      this.clicked = false;
+      onClick();
+    }, DEBOUNCE_INTERVAL);
+  }
+
   handleClick(e) {
     const { onClick, onDoubleClick } = this.props;
     if (this.dropdownNode && this.dropdownNode.contains(e.target)) {

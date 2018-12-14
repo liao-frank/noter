@@ -32,6 +32,8 @@ class App extends Component {
     };
 
     window.browserHistory.listen(this.handleHistory.bind(this));
+    this.noteUpdateSocket = undefined;
+    this.handleNoteUpdate = this.handleNoteUpdate.bind(this);
   }
 
   render() {
@@ -70,6 +72,12 @@ class App extends Component {
         );
       }
     }
+
+    this.noteUpdateSocket = window.listen('note#updateOne_', this.handleNoteUpdate);
+  }
+
+  componentWillUnmount() {
+    this.noteUpdateSocket && this.noteUpdateSocket.disconnect();
   }
 
   handleHistory({ pathname }, action) {
@@ -85,6 +93,25 @@ class App extends Component {
     }
   }
 
+  handleNoteUpdate({ raw }) {
+    const { folder, selected, updateSelected } = this.state;
+
+    if (folder && Object.keys(folder).length) {
+      folder.notes.find((e, index) => {
+        if (!e) return false;
+        if (e._id === raw._id) {
+          folder.notes[index] = raw;
+          this.forceUpdate();
+          return true;
+        }
+        return false;
+      });
+    }
+    if (selected && selected.item && selected.item._id === raw._id) {
+      updateSelected('note', { ...selected.item, ...raw }, true);
+    }
+  }
+
   updateUser(query) {
     const { modal, updateModal, updateUser } = this.state;
 
@@ -93,7 +120,7 @@ class App extends Component {
       updateModal(<LoginModal updateUser={updateUser} updateModal={updateModal}/>);
       return Promise.resolve(false);
     }
-    
+
     return window
       .emit('user#findOne', { query })
       .then((result) => {
@@ -129,8 +156,11 @@ class App extends Component {
             document.title = folder.name;
             this.updateBreadcrumbs(folder);
             const { selected } = this.state;
-            if (selected && !id) {
+            if (selected && id) {
               this.updateSelected('folder', folder, true);
+            }
+            else if (selected) {
+              this.updateSelected(undefined, undefined);
             }
           });
 
@@ -193,9 +223,8 @@ class App extends Component {
     }
   }
 
-  updateSelected(type, item, openOnly=false, onlyOpen=false) {
+  updateSelected(type, item, openOnly=false, onlyOpen=false, updateMetadata=true) {
     const { selected: prevSelected } = this.state;
-
     if (onlyOpen && !prevSelected) {
       return;
     }
@@ -212,10 +241,15 @@ class App extends Component {
       return;
     }
     const selected = { type, item };
-    this.updateSelectedMetadata(selected)
-      .then((selected) => {
-        this.setState({ selected, showingSelected: true });
-      });
+    if (updateMetadata) {
+      this.updateSelectedMetadata(selected)
+        .then((selected) => {
+          this.setState({ selected, showingSelected: true });
+        });
+    }
+    else {
+      this.setState({ selected, showingSelected: true });
+    }
   }
 
   updateSelectedMetadata(selected) {

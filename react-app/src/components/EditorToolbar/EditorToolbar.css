@@ -1,0 +1,45 @@
+.editor-toolbar {
+  
+}
+
+.editor-toolbar .ql-mic {
+  width: 18px !important;
+  padding: 3px 0 !important;
+  margin-left: 5px;
+}
+
+.editor-toolbar .icon-sound-container-container {
+  height: 24px;
+  width: 18px;
+  padding: 3px 0;
+  box-sizing: border-box;
+  float: left;
+}
+
+.editor-toolbar .icon-sound-container {
+  overflow: hidden;
+  animation-name: sound;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease;
+}
+
+@keyframes sound {
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+.editor-toolbar .transcript-preview {
+  display: flex;
+  height: 24px;
+  padding: 3px 5px;
+  float: left;
+
+  white-space: nowrap;
+  align-items: center;
+}
+
+.editor-toolbar .transcript-preview span {
+  color: #787FE8;
+}

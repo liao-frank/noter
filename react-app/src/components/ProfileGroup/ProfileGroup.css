@@ -1,5 +1,6 @@
 .profile-group {
   font-size: 0;
+  white-space: nowrap;
 }
 
 .profile-group .container {

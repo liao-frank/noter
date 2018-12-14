@@ -28,37 +28,52 @@ class Details extends PureComponent {
 
   render() {
     const { showing } = this.state;
+    const { sections, style, width, onClose } = this.props;
 
     return (
       <AppConsumer>
         { (context) => {
-          const { selected, updateSelected } = context;
+          const { selected } = context;
           const { name, members } = selected.item;
           const memberNames = members.map(m => this.getName(m));
 
           return <Sidebar
             className="details"
             hidden={showing ? false : true}
-            width="360" right
-            style={{ overflow: 'visible' }}
+            width={width || '360'} right
+            style={{ ...(style || {}), overflow: 'visible' }}
           >
             <div className="flex-row topper">
-              <h2 className="header">{ name }</h2>
+              <h2 className="header">{
+                (!sections || sections.name !== false) ?
+                name : <span>&nbsp;</span>
+              }</h2>
               <div className="icon icon-24 icon-close"
                 style={{ backgroundImage: `url(${XIcon})` }}
-                onClick={() => { updateSelected() }}
+                onClick={onClose}
               ></div>
             </div>
-            <Section>
-              <ProfileGroup
-                size="48"
-                imageNames={memberNames.map(name => kebabCase(name) + '.jpeg')}
-                tooltips={memberNames}
-              />
-            </Section>
+            { (!sections || sections.members !== false) &&
+              <Section>
+                <ProfileGroup
+                  size="48" tooltips={memberNames}
+                  imageNames={memberNames.map(name => kebabCase(name) + '.jpeg')}
+                />
+              </Section>
+            }
             { selected.type === 'note' &&
-              <Section className="categories-and-tags">
+              <Section className="categories-section">
                 { this.renderCategories(context) }
+              </Section>
+            }
+            { selected.type === 'note' &&
+              <Section className="tags-section">
+                { this.renderTags(context) }
+              </Section>
+            }
+            { selected.type === 'note' &&
+              <Section className="keywords-section">
+                { this.renderKeywords(context) }
               </Section>
             }
             <div className="separator"></div>
@@ -99,7 +114,7 @@ class Details extends PureComponent {
   }
 
   renderCategories(context) {
-    const { folder, selected, updateSelected } = context;
+    const { selected } = context;
     const { item } = selected;
 
     return (
@@ -113,26 +128,15 @@ class Details extends PureComponent {
                   (item.categories.includes(category) ? ' active' : '')}
                 style={{ backgroundColor: CATEGORIES[category] }}
                 onClick={() => {
-                  window
-                    .emit('note#updateOne', {
-                      query: { _id: item._id },
-                      doc: {
-                        [item.categories.includes(category) ?
-                          '$pull' :
-                          '$addToSet']: { categories: category }
-                      },
-                      options: { new: true }
-                    })
-                    .then(({ raw }) => {
-                      folder.notes.find((e) => {
-                        if (e._id === raw._id) {
-                          e.categories = raw.categories;
-                          updateSelected('note', e, true);
-                          return true;
-                        }
-                        return false;
-                      });
-                    });
+                  window.emit('note#updateOne_', {
+                    query: { _id: item._id },
+                    doc: {
+                      [item.categories.includes(category) ?
+                        '$pull' :
+                        '$addToSet']: { categories: category }
+                    },
+                    options: { new: true }
+                  }, undefined, 0);
                 }}
               ></div>
             )) }
@@ -142,10 +146,28 @@ class Details extends PureComponent {
   }
 
   renderTags(context) {
-
     return (
       <div className="detail">
         <div className="key">Tags</div>
+        <div className="tags">
+          <div className="tag">personal</div>
+          <div className="tag">school</div>
+        </div>
+      </div>
+    );
+  }
+
+  renderKeywords(context) {
+    return (
+      <div className="detail">
+        <div className="key">Keywords</div>
+        <div className="keywords">
+          <div className="tag">dog</div>
+          <div className="tag">thing</div>
+          <div className="tag">yes</div>
+          <div className="tag">notes</div>
+          <div className="tag">friend</div>
+        </div>
       </div>
     );
   }
@@ -157,7 +179,10 @@ class Details extends PureComponent {
   }
 
   componentDidUpdate() {
-    if (!this.props.showing) {
+    if (this.props.showing) {
+      this.setState({ showing: true });
+    }
+    else {
       this.setState({ showing: false });
     }
   }

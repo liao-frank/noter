@@ -16,9 +16,9 @@ const Section = (props) => {
 
   return (
     <div className={classNames.join(' ')}>
-      { title && (
-        <h4 className="title">{ title }</h4>
-      ) }
+      { (title && typeof title === 'string') ?
+        ( <h4 className="title">{ title }</h4> ) :
+        ( title ) }
       { subtitle && (
         <h5 className="subtitle">{ subtitle }</h5>
       ) }

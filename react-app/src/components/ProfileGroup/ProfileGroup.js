@@ -26,7 +26,21 @@ const ProfileGroup = (props) => {
     border: `solid ${newSize / 18}px #fff`
   };
 
-  const profiles = imageNames.map((name, index) => {
+  const otherImageNames = [
+    'arnav-agarwal.jpeg',
+    'sarah-li.jpeg',
+    'chris-henderson.jpeg',
+    'warren-johnson.jpeg'
+  ];
+
+  const otherTooltips = [
+    'Arnav Agarwal',
+    'Sarah Li',
+    'Chris Henderson',
+    'Warren Johnson'
+  ];
+
+  const profiles = [ ...imageNames, ...otherImageNames ].map((name, index) => {
     return (
       <div
         key={name}
@@ -37,7 +51,7 @@ const ProfileGroup = (props) => {
           size={size}
           imageName={name}
           style={profileStyle}
-          tooltip={tooltips && tooltips[index]}
+          tooltip={tooltips && [ ...tooltips, ...otherTooltips ][index]}
         />
       </div>
     );

@@ -15,12 +15,12 @@ class LoginModal extends PureComponent {
   }
 
   render() {
-    const { updateModal } = this.props;
+    const { updateModal, showing } = this.props;
     const { invalidCredentials } = this.state;
 
     return (
       <Modal
-        className="login-modal" requireAction={true}
+        className="login-modal" requireAction={true} showing={showing}
         title={
           <div>
             <div className="logo logo-noter"></div>
