@@ -1,4 +1,4 @@
-<img src="/react-app/public/images/noter-logo.png" width="400px">
+<p align="center"><img src="/react-app/public/images/noter-logo.png" width="400px"></p>
 
 ## Inspiration
 This is my capstone project.
