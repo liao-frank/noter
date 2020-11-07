@@ -19,6 +19,6 @@ Think of it as an improvement to Google Drive in certain regards, including:
 - react app
 
 ## Where can I see it?
-Please see screenshots on DevPost [here](https://devpost.com/software/noter-8ua4f6) or view our capstone slides [here](https://docs.google.com/presentation/d/1EuqLow9B4YJVL2q6QtmFVF-G7MoM-qym5FbU5YbqjGw/edit?usp=sharing).
+Please see screenshots/demo video on DevPost [here](https://devpost.com/software/noter-8ua4f6) or view our capstone slides [here](https://docs.google.com/presentation/d/1EuqLow9B4YJVL2q6QtmFVF-G7MoM-qym5FbU5YbqjGw/edit?usp=sharing).
 
-The application will inevitably stop working due to mlab being sunsetted soon, therefore I'm not planning on deploying this application. Sorry!
+The application will inevitably stop working due to mlab (our MongoDB host) being sunsetted soon, therefore I'm not planning on deploying this application for public viewing. Sorry!
